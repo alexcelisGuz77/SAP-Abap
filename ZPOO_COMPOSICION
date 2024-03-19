@@ -1,0 +1,55 @@
+*&------------------------------------------------------------------------&
+*&          REPORT ZPOO_COMPOSICION_ACG
+*&------------------------------------------------------------------------&
+*&
+*&------------------------------------------------------------------------&
+REPORT ZPOO_COMPOSICION_ACG.
+
+*&------------------------------------------------------------------------&
+*&     Definicion de Clases.
+*&------------------------------------------------------------------------&
+CLASS cl_teclado DEFINITION.
+
+    PUBLIC SECTION.
+      DATA tipo_teclado TYPE char2.
+      METHODS set_tipo_teclado IMPORTING tipo_teclado TYPE char2.
+
+ENDCLASS.
+
+CLASS cl_portatil DEFINITION.
+  PUBLIC SECTION.
+    DATA teclado TYPE REF TO cl_teclado.
+    METHODS constructor IMPORTING teclado TYPE REF TO cl_teclado.
+
+ENDCLASS.
+*&------------------------------------------------------------------------&
+*&     Implementacion de Clases.
+*&------------------------------------------------------------------------&
+CLASS cl_teclado IMPLEMENTATION.
+  METHOD set_tipo_teclado.
+    me->tipo_teclado = tipo_teclado.
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS cl_portatil IMPLEMENTATION.
+  METHOD constructor.
+    me->teclado = teclado.
+  ENDMETHOD.
+ENDCLASS.
+
+*&------------------------------------------------------------------------&
+*&  START-OF-SELECTION
+*&------------------------------------------------------------------------&
+
+START-OF-SELECTION.
+
+  DATA: gr_portatil TYPE REF TO cl_portatil,
+        gr_teclado  TYPE REF TO cl_teclado.
+
+  CREATE OBJECT gr_teclado.
+
+  gr_teclado->set_tipo_teclado( tipo_teclado = 'ES' ).
+
+  CREATE OBJECT gr_portatil EXPORTING teclado = gr_teclado.
+
+  WRITE gr_portatil->teclado->tipo_teclado.
