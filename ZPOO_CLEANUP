@@ -1,0 +1,52 @@
+*&------------------------------------------------------------------------&
+*&          REPORT ZPOO_CLEANUP_ACG
+*&------------------------------------------------------------------------&
+*&
+*&------------------------------------------------------------------------&
+REPORT ZPOO_CLEANUP_ACG.
+
+*&------------------------------------------------------------------------&
+*&     Parametros
+*&------------------------------------------------------------------------&
+PARAMETERS: pa_n1 TYPE i,
+            pa_n2 TYPE i.
+
+*&------------------------------------------------------------------------&
+*&  START-OF-SELECTION
+*&------------------------------------------------------------------------&
+
+START-OF-SELECTION.
+
+  DATA: gv_resultado TYPE i,
+        gcx_exception TYPE REF TO cx_root.
+
+TRY.
+
+  TRY.
+    gv_resultado = pa_n1 + pa_n2.
+    gv_resultado = pa_n1 / pa_n2.
+    gv_resultado = pa_n1 - pa_n2.
+
+  CATCH zcx_permisos_acg.
+    write: 'No tiene permiso al recurso solicitado'.
+
+  CATCH zcx_autorizacion_acg.
+    WRITE: 'No Tiene Autorizacion'.
+
+    " Si las exepciones no son tratadas se
+    " llamara a el bloque Cleanup.
+    " de lo contrario no se ejecuta
+
+  CLEANUP.
+    WRITE / 'Estructura de control Cleanup'.
+    WRITE:/ 'Resultado =', gv_resultado .
+
+
+  ENDTRY.
+
+CATCH cx_sy_zerodivide INTO gcx_exception .
+
+  WRITE: / 'Exepcion: ', gcx_exception->get_text( ).
+
+
+ENDTRY.
