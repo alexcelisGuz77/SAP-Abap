@@ -1,0 +1,58 @@
+*&------------------------------------------------------------------------&
+*&          REPORT ZPOO_ASOCIACION_ACG
+*&------------------------------------------------------------------------&
+*&
+*&------------------------------------------------------------------------&
+REPORT ZPOO_ASOCIACION_ACG.
+
+*&------------------------------------------------------------------------&
+*&     Definicion de Clases.
+*&------------------------------------------------------------------------&
+CLASS cl_tarjeta_credito  DEFINITION.
+
+  PUBLIC SECTION.
+
+  DATA num_tarjeta_credito TYPE string.
+  METHODS set_num_tarjeta_credito IMPORTING num_tarjeta TYPE string.
+
+ENDCLASS.
+
+CLASS cl_cliente DEFINITION.
+
+  PUBLIC SECTION.
+      DATA tarjeta_credito TYPE REF TO cl_tarjeta_credito.
+      METHODS set_tarjeta_credito IMPORTING tarjeta_credito TYPE REF TO cl_tarjeta_credito.
+
+ENDCLASS.
+*&------------------------------------------------------------------------&
+*&     Implementacion de Clases.
+*&------------------------------------------------------------------------&
+CLASS cl_tarjeta_credito IMPLEMENTATION.
+  METHOD set_num_tarjeta_credito.
+    me->num_tarjeta_credito = num_tarjeta.
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS cl_cliente IMPLEMENTATION.
+  METHOD set_tarjeta_credito.
+    me->tarjeta_credito = tarjeta_credito.
+  ENDMETHOD.
+ENDCLASS.
+*&------------------------------------------------------------------------&
+*&  START-OF-SELECTION
+*&------------------------------------------------------------------------&
+
+START-OF-SELECTION.
+
+    DATA: gr_tarjeta_credito TYPE REF TO cl_tarjeta_credito,
+          gr_cliente         TYPE REF TO cl_cliente.
+
+    CREATE OBJECT: gr_tarjeta_credito,
+                   gr_cliente.
+
+ gr_tarjeta_credito->set_num_tarjeta_credito( num_tarjeta = '1111 2222 3333 4444').
+ gr_cliente->set_tarjeta_credito( tarjeta_credito = gr_tarjeta_credito ).
+
+
+WRITE gr_cliente->tarjeta_credito->num_tarjeta_credito.
