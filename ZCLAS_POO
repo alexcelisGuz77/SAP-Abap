@@ -1,0 +1,67 @@
+*&---------------------------------------------------------------*
+*&                    REPORT ZCLAS_POO_ACG.
+*&
+*&---------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------*
+
+REPORT zclas_poo_acg.
+
+*&---------------------------------------------------------------*
+*& DEFINICION DEL OBJETO ALUPNO
+*&---------------------------------------------------------------*
+
+
+CLASS alumno DEFINITION.
+
+  PUBLIC SECTION. "encapsulacion Publica
+
+    METHODS set_nombre IMPORTING i_nombre TYPE string.
+
+    METHODS get_nombre EXPORTING e_nombre TYPE string.
+
+  PROTECTED SECTION. "encapsulacion protec
+
+  PRIVATE SECTION. "encapsulacion privada
+
+  DATA nombre TYPE string.
+
+ENDCLASS.
+
+*&---------------------------------------------------------------*
+*&                Implementacion de la clase  en los metodos
+*&---------------------------------------------------------------*
+class alumno IMPLEMENTATION.
+
+  METHOD set_nombre.
+
+    nombre = i_nombre.
+
+  ENDMETHOD.
+
+  METHOD get_nombre.
+
+    e_nombre = nombre.
+
+  ENDMETHOD.
+
+ENDCLASS.
+
+*&---------------------------------------------------------------*
+*&                START-OF-SELECTION
+*&    Objetos que hacen referenca al tipo de la clase
+*&---------------------------------------------------------------*
+
+
+START-OF-SELECTION.
+
+  DATA: go_alumno  TYPE REF TO alumno,"  hace refencia a la classe alumno
+       gv_nombre TYPE string.
+
+CREATE OBJECT go_alumno. " se crea un objetode la clase
+
+CALL METHOD go_alumno->set_nombre EXPORTING  i_nombre = 'Alberto'.
+
+CALL METHOD go_alumno->get_nombre IMPORTING e_nombre = gv_nombre.
+
+write gv_nombre.
