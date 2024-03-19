@@ -1,0 +1,53 @@
+*&----------------------------------------------------------*&
+*&                REPORT ZPOO_ATRIBUTOS_ACG24.
+*&----------------------------------------------------------*&
+
+REPORT ZPOO_ATRIBUTOS_ACG24.
+
+CLASS cliente DEFINITION.
+
+ PUBLIC SECTION.
+
+  DATA nombre type string.
+
+ENDCLASS.
+
+CLASS factura DEFINITION.
+
+PUBLIC SECTION.
+
+    DATA: no_cuenta_cliente type knkli,
+          cliente_factura  TYPE REF TO cliente.
+
+    CLASS-DATA fecha_envio type sydatum.
+
+ ENDCLASS.
+
+ START-OF-SELECTION.
+
+  DATA: gr_factura_a TYPE REF TO factura,
+        gr_factura_b TYPE REF TO factura,
+        gr_cliente   TYPE REF TO cliente.
+
+ create OBJECT: gr_factura_a,
+                gr_factura_b,
+                gr_cliente.
+
+ factura=>fecha_envio = '20201001'.
+ gr_factura_a->no_cuenta_cliente = 'Cuenta A'.
+ gr_factura_a->cliente_factura = gr_cliente.
+
+ gr_factura_a->cliente_factura->nombre = 'cliente A'.
+
+
+
+ gr_factura_b->no_cuenta_cliente = 'Cuenta B'.
+
+ write: / gr_factura_a->no_cuenta_cliente,
+        / gr_factura_a->cliente_factura->nombre,
+        / gr_factura_a->fecha_envio.
+
+ skip 2.
+
+ write: / gr_factura_b->no_cuenta_cliente,
+        / gr_factura_b->fecha_envio.
