@@ -1,0 +1,54 @@
+*&---------------------------------------------------------------------------------*
+*&                            REPORT ZPOO_CONSTR_ACG.
+*&---------------------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------------------*
+
+  REPORT ZPOO_CONSTR_ACG.
+
+*&---------------------------------------------------------------------------------*
+*&                             Definicion de Clases
+*&---------------------------------------------------------------------------------*
+
+
+CLASS empleado DEFINITION.
+  PUBLIC SECTION.
+*-------Constructor por Intancias
+    METHODS: constructor IMPORTING i_nombre TYPE string.
+*-------Contructor estatico No pueden llevar parametros
+    CLASS-METHODS class_constructor. " esta clase solo se ejecutara una ves sin importar el nu8mero de instancias
+
+  PRIVATE SECTION.
+    DATA nombre TYPE string.
+ENDCLASS.
+
+*&---------------------------------------------------------------------------------*
+*&                          Implemkentacion de Clases
+*&---------------------------------------------------------------------------------*
+
+
+CLASS empleado IMPLEMENTATION.
+  METHOD constructor.
+    nombre = i_nombre.
+    WRITE: / 'Constructor de instancia'.
+
+  ENDMETHOD.
+
+  METHOD class_constructor.
+        WRITE / ' Constructor Estatico'.
+  ENDMETHOD.
+ENDCLASS.
+
+
+*&---------------------------------------------------------------------------------*
+*&                            START-OF-SELECTION
+*&---------------------------------------------------------------------------------*
+
+
+START-OF-SELECTION.
+
+  data: gr_empleado_1 TYPE REF TO empleado,  " Instancias
+        gr_empleado_2 TYPE REF TO empleado.  " Instancias
+
+  CREATE OBJECT gr_empleado_1 EXPORTING i_nombre = 'Carlos'.
+  CREATE OBJECT gr_empleado_1 EXPORTING i_nombre = 'Alberto'.
