@@ -1,0 +1,142 @@
+*&------------------------------------------------------------------------------------------&*
+*&                REPORT ZPOO_ENUNCIADO1_ACG.
+*&------------------------------------------------------------------------------------------&*
+*&
+*&------------------------------------------------------------------------------------------&*
+
+REPORT zpoo_enunciado1_acg.
+
+*&------------------------------------------------------------------------------------------&*
+*&                      Creacion de Classe xd
+*&------------------------------------------------------------------------------------------&*
+
+" 1.- creacion de classes.
+CLASS lcl_material DEFINITION.
+  PUBLIC SECTION.
+    DATA: matnr          TYPE matnr,
+          fecha_creacion TYPE ersda.
+    METHODS: set_matnr IMPORTING i_matnr TYPE matnr,
+             get_matnr EXPORTING e_matnr TYPE matnr,
+             set_Fecha_creacion IMPORTING i_fecha_creacion type ersda,
+             get_Fecha_creacion EXPORTING e_fecha_creacion type ersda.
+ENDCLASS.
+*-Fin de Creacion de cases.
+
+"2.- Encapsulacion
+CLASS LCL_CONTRATO DEFINITION.
+  PUBLIC SECTION.
+  DATA tipo_cntr TYPE abap_bool.
+  PROTECTED SECTION.
+  DATA fecha_alta TYPE sydatum.
+  METHODS set_fecha_alta IMPORTING i_fecha_alta TYPE sydatum.
+  PRIVATE SECTION.
+  DATA CLIENT TYPE string.
+ENDCLASS.
+*-Fin de Encapsulacion.
+
+*4.-Metodos de Intancia y metodos Estaticos
+CLASS lcl_persona DEFINITION.
+  PUBLIC SECTION.
+    DATA edad TYPE i.
+    METHODS: SET_EDAD IMPORTING i_edad TYPE i,
+             GET_EDAD EXPORTING e_edad TYPE i.
+
+ENDCLASS.
+*- Fin Metodos de Intancia y metodos Estaticos
+
+*5.- Métodos funcionales
+  CLASS lcl_vuelo DEFINITION.
+    PUBLIC SECTION.
+      METHODS vuelo IMPORTING i_vuelo TYPE bukrs
+                    RETURNING VALUE(existe) TYPE abap_bool.
+  ENDCLASS.
+*FIN Métodos funcionales
+
+*&-----------------------------------------------------------------------------*$
+*&                      Implementaciones de clases
+*&-----------------------------------------------------------------------------*$
+
+" 1.- creacion de classes.
+CLASS lcl_material IMPLEMENTATION.
+  METHOD set_matnr.
+     matnr = i_matnr.
+  ENDMETHOD.
+  METHOD get_matnr.
+     e_matnr = matnr.
+  ENDMETHOD.
+  METHOD set_fecha_creacion.
+    fecha_creacion = i_fecha_creacion.
+  ENDMETHOD.
+  METHOD Get_fecha_creacion.
+    E_fecha_creacion = fecha_creacion.
+  ENDMETHOD.
+ENDCLASS.
+*-Fin de Creacion de cases.
+
+"2.- Encapsulacion
+CLASS lcl_contrato IMPLEMENTATION.
+  METHOD set_fecha_alta.
+
+  ENDMETHOD.
+ENDCLASS.
+*-Fin de Encapsulacion.
+
+*4.-Metodos de Intancia y metodos Estaticos
+CLASS lcl_persona IMPLEMENTATION.
+  METHOD set_edad.
+    edad = i_edad.
+  ENDMETHOD.
+  METHOD get_edad.
+    e_edad = edad.
+  ENDMETHOD.
+ENDCLASS.
+*- Fin Metodos de Intancia y metodos Estaticos
+
+*5.- Métodos funcionales
+  CLASS lcl_vuelo IMPLEMENTATION.
+    METHOD vuelo.
+      DATA lv_soc type bukrs.
+      SELECT SINGLE CONNID FROM SPFLI
+        INTO lv_soc  WHERE  CONNID eq i_vuelo.
+
+      IF sy-subrc EQ 0.
+          existe = abap_true.
+      ENDIF.
+    ENDMETHOD.
+  ENDCLASS.
+*FIN Métodos funcionales
+
+*&-----------------------------------------------------------------------------*$
+*&                      START-OF-SELECTION.
+*&-----------------------------------------------------------------------------*$
+
+START-OF-SELECTION.
+
+" 1.- creacion de classes.
+DATA: gr_material TYPE REF TO lcl_material.
+  CREATE OBJECT gr_material.
+  gr_material->set_matnr( i_matnr = '50' ).
+  gr_material->set_fecha_creacion( i_fecha_creacion = '20100512').
+  WRITE: / 'gr_material - matnr: ', gr_material->matnr,
+           ' fecha de creacion: ', gr_material->fecha_creacion.
+*-Fin de Creacion de cases.
+
+*4.-Metodos de Intancia y metodos Estaticos
+DATA: gr_persona TYPE REF TO lcl_persona.
+  CREATE OBJECT gr_persona.
+  DATA edad2 TYPE i.
+  gr_persona->set_edad( i_edad = '20' ).
+  WRITE: / 'La edad es: ', gr_persona->edad.
+*- Fin Metodos de Intancia y metodos Estaticos
+
+
+*5.- Métodos funcionales
+ DATA: gr_vuelo TYPE REF TO lcl_vuelo.
+  CREATE OBJECT gr_vuelo.
+
+  IF gr_vuelo->vuelo( i_vuelo = '0004') EQ abap_true.
+       WRITE: / 'El vuelo existe'.
+    ELSE.
+      WRITE: / 'El vuelo NO existe'.
+  ENDIF.
+*FIN Métodos funcionales
